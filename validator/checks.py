@@ -132,7 +132,7 @@ def url_list_check(cells):
     errors = []
     try:
         field = _get_field(cells, 'PlanningHistory')
-        if field is None:
+        if field is None or field.get('value') is None:
             return errors
         else:
             urls = field['value'].split('|')
