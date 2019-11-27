@@ -8,6 +8,27 @@ from validator.checks import MAXIMUM_UK_LATITUDE
 from validator.checks import MINIMUM_UK_LATITUDE
 
 
+def test_valid_geox_passes():
+    field = {'name': 'GeoX',
+             'title': 'GeoX',
+             'description': 'Does not matter for this test',
+             'type': 'number',
+             'constraints': {'required': True},
+             'format': 'default'}
+
+    field = Field(field, missing_values=[])
+
+    cells = [{'header': 'GeoX',
+              'field': field,
+              'value': Decimal('-1.123456'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
+
+    errors = geox_check(cells)
+    assert len(errors) == 0
+
+
 def test_geox_looks_like_correct_coordinate_reference_system():
 
     field = {'name': 'GeoX',
@@ -95,6 +116,26 @@ def test_geox_should_be_within_bounds_of_uk_longitude():
     assert errors[0].code == 'geo-error'
     assert errors[0].message == '3 is not a longitude within the UK'
 
+
+def test_valid_geoy_passes():
+    field = {'name': 'GeoY',
+             'title': 'GeoY',
+             'description': 'Does not matter for this test',
+             'type': 'number',
+             'constraints': {'required': True},
+             'format': 'default'}
+
+    field = Field(field, missing_values=[])
+
+    cells = [{'header': 'GeoY',
+              'field': field,
+              'value': Decimal('55.123456'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
+
+    errors = geoy_check(cells)
+    assert len(errors) == 0
 
 
 def test_geoy_looks_like_correct_coordinate_reference_system():
