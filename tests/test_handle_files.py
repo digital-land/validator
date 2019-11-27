@@ -45,7 +45,7 @@ def test_can_handle_xls_file(xls_file, schema_file):
 
     result = validate_file(xls_file, schema_file)
 
-    assert result.result['tables'][0]['error-count'] == 9
+    assert result.result['tables'][0]['error-count'] == 10
     assert len(result.upload) == 2
 
 
@@ -53,7 +53,7 @@ def test_can_handle_xlsx_file(xlsx_file, schema_file):
 
     result = validate_file(xlsx_file, schema_file)
 
-    assert result.result['tables'][0]['error-count'] == 9
+    assert result.result['tables'][0]['error-count'] == 10
     assert len(result.upload) == 2
 
 
@@ -64,7 +64,7 @@ def test_xlsm_file(xlsm_file, schema_file):
 
     result = validate_file(xlsm_file, schema_file)
 
-    assert result.result['tables'][0]['error-count'] == 13
+    assert result.result['tables'][0]['error-count'] == 14
     assert len(result.upload) == 2
 
 

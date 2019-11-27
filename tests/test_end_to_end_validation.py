@@ -5,7 +5,7 @@ def test_check_uploaded_data_in_end_to_end_validation(csv_file, schema_file, upl
 
     result = validate_file(csv_file, schema_file)
 
-    assert result.result['tables'][0]['error-count'] == 7
+    assert result.result['tables'][0]['error-count'] == 8
     assert len(result.upload) == 2
     assert len(result.upload) == len(upload)
     assert set(result.upload[0].keys()) == set(upload[0].keys())
@@ -18,7 +18,7 @@ def test_check_extracted_rows_in_end_to_end_validation(csv_file, schema_file, ro
 
     result = validate_file(csv_file, schema_file)
 
-    assert result.result['tables'][0]['error-count'] == 7
+    assert result.result['tables'][0]['error-count'] == 8
     assert len(result.rows) == 2
     assert len(result.rows) == len(rows)
     assert set(result.rows[0].keys()) == set(rows[0].keys())
