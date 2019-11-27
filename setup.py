@@ -25,7 +25,7 @@ setup(
     ],
     entry_points={
         'console_scripts': [
-            'validate = validation.cli:validate',
+            'validate = validator.cli:validate',
         ]
     },
     python_requires=">=3.6",

@@ -1,6 +1,6 @@
 from jinja2 import Environment, PackageLoader, select_autoescape
 env = Environment(
-    loader=PackageLoader('validation', 'templates'),
+    loader=PackageLoader('validator', 'templates'),
     autoescape=select_autoescape(['html'])
 )
 
