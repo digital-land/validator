@@ -37,6 +37,8 @@ def check_data(data, schema):
     return goodtables.validate(data, schema=schema, order_fields=True, checks=checks)
 
 
+# TODO - I don't think this is really needed here, it can be moved to the
+# brownfield validator web app as it's more relevant in that context
 def revalidate_result(result, schema):
     res = check_data(result.rows, schema)
     return Result(id=result.id,
