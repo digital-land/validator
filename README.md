@@ -14,7 +14,7 @@ The main goals of this library
 
 The development of this library was driven by work on a prototype brownfield land csv validation web application. 
 
-To make our lives easier we  bundled [a table schema]((validator/schema/brownfield-land-v2.json)) for the [Brownfield land data standard](https://www.gov.uk/government/publications/brownfield-land-registers-data-standard/publish-your-brownfield-land-data#publish-your-brownfield-land-data) 
+To make our lives easier we  bundled [a table schema](validator/schema/brownfield-land-v2.json)) for the [Brownfield land data standard](https://www.gov.uk/government/publications/brownfield-land-registers-data-standard/publish-your-brownfield-land-data#publish-your-brownfield-land-data) 
 in this code base. This is just a convenience and if development continues it's likely the schema can be hosted elsewhere. 
 
 This library can be used programmatically and or from command line.
