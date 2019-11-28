@@ -1,4 +1,6 @@
 ## CSV validator
+[![build](https://travis-ci.org/digital-land/validator.svg?branch=master)](https://travis-ci.org/digital-land/validator)
+[![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/digital-land/validator/blob/master/LICENSE)
 
 **Development status: Alpha**
 
