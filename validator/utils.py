@@ -74,22 +74,19 @@ class BrownfieldStandard:
 def try_convert_to_csv(filename):
     import subprocess
     try:
-        try:
-            with open(f'{filename}.csv', 'w') as out:
-                subprocess.check_call(['in2csv', filename], stdout=out)
-                return f'{filename}.csv', 'xls'
-        except CalledProcessError as e:
-            logger.exception(e)
-        try:
-            with open(f'{filename}.csv', 'w') as out:
-                subprocess.check_call(['xlsx2csv', filename], stdout=out)
-            return f'{filename}.csv', 'xlsm'
-        except CalledProcessError as e:
-            logger.exception(e)
-
-        raise Exception
-
-    except Exception as e:  # noqa
+        with open(f'{filename}.csv', 'w') as out:
+            subprocess.check_call(['in2csv', filename], stdout=out)
+        return f'{filename}.csv', 'xls'
+    except CalledProcessError as e:
+        print(e)
+        logger.exception(e)
+        # try converting with xls2csv
+    try:
+        with open(f'{filename}.csv', 'w') as out:
+            subprocess.check_call(['xlsx2csv', filename], stdout=out)
+        return f'{filename}.csv', 'xlsm'
+    except CalledProcessError as e:
+        logger.exception(e)
         msg = f"We could not process {filename.split('/')[-1]} as a csv file"
         raise FileTypeException(msg)
 
@@ -161,5 +158,4 @@ def _looks_like_csv(file):
             csv.Sniffer().sniff(content)
             return True
     except Exception as e:  # noqa
-        logger.exception(e)
         return False
