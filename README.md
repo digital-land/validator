@@ -41,12 +41,11 @@ in a console.
 
     validate --help
 
-The command line produces result output to the console. The format of the output defaults to a summary of validation
-results. It can also product html or json output to standard output, so needs to be redirected in order to produce
-an html or json file. 
+The command line prints result output to the console. The format of the output defaults to a summary of validation
+results. It can also output an html or json version of the result, also to the console. Therefore if you want to save the html or json you should redirect the output to a file.
 
-Note that the Result that is used to create all the forms of output is also used in the 
-[validation prototype web application](https://github.com/digital-land/brownfield-sites-validator) 
+Note that the result object that is used to create all the forms of output is also used in the 
+[validation prototype web application](https://github.com/digital-land/brownfield-sites-validator) so it's easy to create similar html in both use cases.
 
 To run the validator against [version 2 of the brownfield register schema](validator/schema/brownfield-land-v2.json)
 
@@ -74,6 +73,8 @@ Redirect output to create a file from the result:
      
 
 ### Programmatic usage
+
+     from validator.validator import validate_file
 
      result = validate_file(file, schema)
      
