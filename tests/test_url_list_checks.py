@@ -1,3 +1,5 @@
+# flake8: noqa
+
 from validator import url_list_check
 
 

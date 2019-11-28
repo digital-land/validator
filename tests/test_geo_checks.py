@@ -41,11 +41,11 @@ def test_geox_looks_like_correct_coordinate_reference_system():
     field = Field(field, missing_values=[])
 
     cells = [{'header': 'GeoX',
-            'field': field,
-            'value': Decimal('139531'),
-            'column-number': 4,
-            'number': 4,
-            'row-number': 1}]
+              'field': field,
+              'value': Decimal('139531'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
 
     errors = geox_check(cells)
 
@@ -66,11 +66,11 @@ def test_geox_not_more_than_6_decimal_places():
     field = Field(field, missing_values=[])
 
     cells = [{'header': 'GeoX',
-            'field': field,
-            'value': Decimal('-1.1234567'),
-            'column-number': 4,
-            'number': 4,
-            'row-number': 1}]
+              'field': field,
+              'value': Decimal('-1.1234567'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
 
     errors = geox_check(cells)
 
@@ -150,11 +150,11 @@ def test_geoy_looks_like_correct_coordinate_reference_system():
     field = Field(field, missing_values=[])
 
     cells = [{'header': 'GeoY',
-            'field': field,
-            'value': Decimal('543216'),
-            'column-number': 4,
-            'number': 4,
-            'row-number': 1}]
+              'field': field,
+              'value': Decimal('543216'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
 
     errors = geoy_check(cells)
 
@@ -175,11 +175,11 @@ def test_geoy_not_more_than_6_decimal_places():
     field = Field(field, missing_values=[])
 
     cells = [{'header': 'GeoY',
-            'field': field,
-            'value': Decimal('50.1234567'),
-            'column-number': 4,
-            'number': 4,
-            'row-number': 1}]
+              'field': field,
+              'value': Decimal('50.1234567'),
+              'column-number': 4,
+              'number': 4,
+              'row-number': 1}]
 
     errors = geoy_check(cells)
 
