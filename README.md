@@ -92,4 +92,10 @@ To run tests with linting
 
     pytest --flake8
     
-    
+ 
+#### TODO
+
+- html template for output is bare bones while awaiting some jinja macros being extracted from validator prototype.
+- extract brownfield schema to more permanent home and remove it as the default so that this library is more agnostic.
+- rather than default to brownfield schema above, default would be a basic goodtables structural check.
+- document the additional checks in this code base and add them to validation based on user input or configuration?
