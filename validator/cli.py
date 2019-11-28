@@ -24,7 +24,6 @@ def validate(file, schema, output):
         result = validate_file(file, schema)
         if output == 'console':
             out = ConsoleResultPresenter(result)
-            print(out)
         elif output == 'html':
             out = HtmlResultPresenter(result)
         elif output == 'json':
