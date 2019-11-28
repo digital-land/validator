@@ -30,7 +30,7 @@ to your Pipfile in [packages] section:
     
 If you're using pip and a requirements file:
 
-    -e git+https://github.com/digital-land/validator.git
+    -e git+https://github.com/digital-land/validator.git#egg=Validator
 
 
 
