@@ -28,8 +28,6 @@ to your Pipfile in [packages] section:
 
     validator = {editable = true,git = "https://github.com/digital-land/validator.git"}
 
-
-**NOTE: pip install not working at the moment and I haven't been able to work out how to fix yet**
 If you're using pip and a requirements file:
 
     -e git+https://github.com/digital-land/validator.git#egg=Validator
