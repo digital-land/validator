@@ -125,3 +125,14 @@ def test_result_shows_error_counts_by_column(result, original_data, rows, meta_d
                 'messages': ['This column can contain one or more URLs separated by a pipe (‘|’) character'],
                 'rows': [1]}}
     assert expected == result.collect_errors_by_column('PlanningHistory')
+
+
+def test_result_factory_method():
+    from tests.data.result import result as _result
+    result = Result.factory(_result)
+    assert len(result.rows) == 2
+    assert len(result.upload) == 2
+    assert not result.valid()
+    assert result.error_count() == 8
+    result.invalid_rows() == 2
+

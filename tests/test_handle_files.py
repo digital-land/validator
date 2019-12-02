@@ -47,6 +47,7 @@ def test_can_handle_xls_file(xls_file, schema_file):
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.upload) == 2
+    assert result.meta_data['file_type'] == 'xls'
 
 
 def test_can_handle_xlsx_file(xlsx_file, schema_file):
@@ -55,6 +56,7 @@ def test_can_handle_xlsx_file(xlsx_file, schema_file):
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.upload) == 2
+    assert result.meta_data['file_type'] == 'xls'
 
 
 # Note in this test there are additional date errors because of how xls2csv interprets dates.
@@ -66,6 +68,7 @@ def test_xlsm_file(xlsm_file, schema_file):
 
     assert result.result['tables'][0]['error-count'] == 14
     assert len(result.upload) == 2
+    assert result.meta_data['file_type'] == 'xlsm'
 
 
 def test_file_that_cannot_be_converted_to_csv_throws_exception(not_a_csv_file, schema_file):

@@ -33,6 +33,16 @@ class Result:
         else:
             self.errors_by_column = errors_by_column
 
+    @staticmethod
+    def factory(result_dict):
+        result = Result(result=result_dict['raw_result'],
+                        upload=result_dict['upload'],
+                        rows=result_dict['rows'],
+                        meta_data=result_dict['meta_data'],
+                        errors_by_row=result_dict['errors_by_row'],
+                        errors_by_column=result_dict['errors_by_column'])
+        return result
+
     def valid(self):
         return self.result['valid']
 
@@ -170,10 +180,12 @@ class Result:
     def to_dict(self):
         return {
             'id': str(self.id) if self.id else None,
-            'headers_expected': BrownfieldStandard.v2_standard_headers(),
-            'headers_found': self.headers_found(),
-            'missing_headers': self.missing_headers(),
-            'additional_headers': self.additional_headers(),
+            'meta_data': {
+                'headers_expected': BrownfieldStandard.v2_standard_headers(),
+                'headers_found': self.headers_found(),
+                'missing_headers': self.missing_headers(),
+                'additional_headers': self.additional_headers(),
+            },
             'upload': self.upload,
             'rows': self.rows,
             'errors_by_row': self.errors_by_row,
