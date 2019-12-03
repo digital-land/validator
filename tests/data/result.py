@@ -23,7 +23,7 @@ result = {'meta_data': {
      ('ProposedForPIP', ''), ('MinNetDwellings', '27'), ('DevelopmentDescription', 'Erection of 27No. Dwellings'),
      ('NonHousingDevelopment', ''), ('Part2', ''), ('NetDwellingsRangeFrom', ''), ('NetDwellingsRangeTo', ''),
      ('HazardousSubstances', ''), ('SiteInformation', ''), ('Notes', ''), ('FirstAddedDate', '2017-12-01'),
-     ('LastUpdatedDate', '2017-12-08')],
+     ('LastUpdatedDate', '8 Dec 2017')],
     [('OrganisationURI', 'http://opendatacommunities.org/id/district-council/winchester'),
      ('OrganisationLabel', 'Winchester City Council'), ('SiteReference', 'BLR17/02'),
      ('PreviouslyPartOf', '16/03095/FUL'), ('SiteNameAddress', '63  Andover Road'),
@@ -36,7 +36,7 @@ result = {'meta_data': {
                                                          'Demolition of existing dwelling and erection of 10No. dwellings (6No. 2 Bed Flats and 4No. 3 Bed Houses)'),
      ('NonHousingDevelopment', ''), ('Part2', ''), ('NetDwellingsRangeFrom', ''), ('NetDwellingsRangeTo', ''),
      ('HazardousSubstances', ''), ('SiteInformation', ''), ('Notes', ''), ('FirstAddedDate', '2017-12-01'),
-     ('LastUpdatedDate', '2017-12-08')]], 'rows': [
+     ('LastUpdatedDate', '13/12/2017')]], 'rows': [
     [('OrganisationURI', 'http://opendatacommunities.org/id/district-council/winchester'),
      ('SiteReference', 'BLR17/01'), ('SiteNameAddress', 'Old Station Yard  Oxford Road'), ('GeoX', 'not-a-geox'),
      ('GeoY', '139531'), ('SiteplanURL', 'not-a-url'), ('Hectares', '0.9'),

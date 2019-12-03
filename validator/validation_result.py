@@ -177,6 +177,16 @@ class Result:
                 rows.append(error['row-number'])
         return set(rows)
 
+    def apply_fixes(self, column):
+        column_errors = self.errors_by_column.get(column)
+        if column_errors is not None and column_errors.get('errors') is not None:
+            for index, error in enumerate(column_errors.get('errors')):
+                row = error['row'] - 1  # row numbers are not zero indexed
+                fix = error['fix']
+                value = error['value']
+                if row == index and self.rows[index][column] == value and fix is not None:
+                    self.rows[index][column] = fix
+
     def to_dict(self):
         return {
             'id': str(self.id) if self.id else None,
