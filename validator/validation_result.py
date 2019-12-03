@@ -181,12 +181,12 @@ class Result:
         fixes_applied = []
         column_errors = self.errors_by_column.get(column)
         if column_errors is not None and column_errors.get('errors') is not None:
-            for index, error in enumerate(column_errors.get('errors')):
+            for error in column_errors.get('errors'):
                 row = error['row'] - 1  # row numbers are not zero indexed
                 fix = error['fix']
                 value = error['value']
-                if row == index and self.rows[index][column] == value and fix is not None:
-                    self.rows[index][column] = fix
+                if self.rows[row][column] == value and fix is not None:
+                    self.rows[row][column] = fix
                     fixes_applied.append({'row': error['row'], 'from': value, 'to': fix})
         return fixes_applied
 
