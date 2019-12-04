@@ -175,7 +175,7 @@
             "description": "The date this entry in the register was updated in the format YYYY-MM-DD",
             "type": "date",
             "constraints": {
-                "required": true
+                "required": false
             }
         },
         {
