@@ -4,11 +4,6 @@ import goodtables
 from validator.utils import extract_data, FileTypeException, logging_handler
 from validator.validation_result import Result
 
-
-custom_checks = ['geox-check', 'geoy-check', 'url-list-check']  # TODO the list of checks could be config or cli options?
-builtin_checks = ['structure', 'schema']
-checks = builtin_checks + custom_checks
-
 logger = logging.getLogger(__name__)
 logger.addHandler(logging_handler)
 
@@ -34,6 +29,9 @@ def validate_file(file, schema):
 
 
 def check_data(data, schema):
+    custom_checks = ['geox-check', 'geoy-check', 'url-list-check']  # TODO the list of checks could be config or cli options?
+    builtin_checks = ['structure', 'schema']
+    checks = builtin_checks + custom_checks
     return goodtables.validate(data, schema=schema, order_fields=True, checks=checks)
 
 

@@ -1,4 +1,4 @@
-## CSV validator
+## Brownfield land CSV validator
 [![build](https://travis-ci.org/digital-land/validator.svg?branch=master)](https://travis-ci.org/digital-land/validator)
 [![License](https://img.shields.io/github/license/mashape/apistatus.svg)](https://github.com/digital-land/validator/blob/master/LICENSE)
 
@@ -98,6 +98,8 @@ To run tests with linting
  
 #### TODO
 
+- More work needs to be done if we want to make this a more generic validator as it's still very tightly coupled to 
+brownfield land csv validation.
 - html template for output is bare bones while awaiting some jinja macros being extracted from validator prototype.
 - extract brownfield schema to more permanent home and remove it as the default so that this library is more agnostic.
 - rather than default to brownfield schema above, default would be a basic goodtables structural check.
