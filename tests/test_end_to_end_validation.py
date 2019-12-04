@@ -1,17 +1,17 @@
 from validator.validator import validate_file
 
 
-def test_check_uploaded_data_in_end_to_end_validation(csv_file, schema_file, upload):
+def test_check_uploaded_data_in_end_to_end_validation(csv_file, schema_file, input):
 
     result = validate_file(csv_file, schema_file)
 
     assert result.result['tables'][0]['error-count'] == 10
-    assert len(result.upload) == 2
-    assert len(result.upload) == len(upload)
-    assert set(result.upload[0].keys()) == set(upload[0].keys())
-    assert set(result.upload[1].keys()) == set(upload[1].keys())
-    assert set(result.upload[0].values()) == set(upload[0].values())
-    assert set(result.upload[1].values()) == set(upload[1].values())
+    assert len(result.input) == 2
+    assert len(result.input) == len(input)
+    assert set(result.input[0].keys()) == set(input[0].keys())
+    assert set(result.input[1].keys()) == set(input[1].keys())
+    assert set(result.input[0].values()) == set(input[0].values())
+    assert set(result.input[1].values()) == set(input[1].values())
 
 
 def test_check_extracted_rows_in_end_to_end_validation(csv_file, schema_file, rows):

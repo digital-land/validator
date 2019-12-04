@@ -11,7 +11,7 @@ result = {'meta_data': {
                       'FirstAddedDate', 'LastUpdatedDate'], 'missing_headers': ['EndDate'],
     'additional_headers': ['PreviouslyPartOf', 'OrganisationLabel', 'ProposedForPIP', 'DevelopmentDescription',
                            'CoordinateReferenceSystem', 'Part2', 'MinNetDwellings', 'SiteInformation',
-                           'NonHousingDevelopment']}, 'upload': [
+                           'NonHousingDevelopment']}, 'input': [
     [('OrganisationURI', 'http://opendatacommunities.org/id/district-council/winchester'),
      ('OrganisationLabel', 'Winchester City Council'), ('SiteReference', 'BLR17/01'),
      ('PreviouslyPartOf', '16/00999/FUL'), ('SiteNameAddress', 'Old Station Yard  Oxford Road'),
@@ -241,7 +241,7 @@ result = {'meta_data': {
                                     'value': 'https://planningapps.winchester.gov.uk/online-applications/search.do?action=simple&searchType=Application|this-item-is-not-a-url'}],
                                                    'messages': [
                                                        'This column can contain one or more URLs separated by a pipe (‘|’) character']}},
-          'raw_result': {'time': 0.112, 'valid': False, 'error-count': 8, 'table-count': 1, 'tables': [
+          'result': {'time': 0.112, 'valid': False, 'error-count': 8, 'table-count': 1, 'tables': [
               {'time': 0.01, 'valid': False, 'error-count': 8, 'row-count': 2, 'source': 'inline',
                'headers': ['Deliverable', 'FirstAddedDate', 'GeoX', 'GeoY', 'HazardousSubstances', 'Hectares',
                            'LastUpdatedDate',

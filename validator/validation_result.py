@@ -8,7 +8,7 @@ class Result:
 
     def __init__(self,
                  result,
-                 upload,
+                 input,
                  rows,
                  meta_data,
                  errors_by_row=None,
@@ -17,7 +17,7 @@ class Result:
 
         self.id = id
         self.result = result
-        self.upload = upload
+        self.input = input
         self.rows = rows
         self.meta_data = meta_data
         cols_to_headers = {}
@@ -35,8 +35,8 @@ class Result:
 
     @staticmethod
     def factory(result_dict):
-        result = Result(result=result_dict['raw_result'],
-                        upload=result_dict['upload'],
+        result = Result(result=result_dict['result'],
+                        input=result_dict['input'],
                         rows=result_dict['rows'],
                         meta_data=result_dict['meta_data'],
                         errors_by_row=result_dict['errors_by_row'],
@@ -199,9 +199,9 @@ class Result:
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
             },
-            'upload': self.upload,
+            'input': self.input,
             'rows': self.rows,
             'errors_by_row': self.errors_by_row,
             'errors_by_column': self.errors_by_column,
-            'raw_result': self.result
+            'result': self.result
         }

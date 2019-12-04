@@ -5,9 +5,9 @@ import pytest
 
 
 @pytest.fixture(scope='session')
-def upload():
-    from tests.data.test_data import upload
-    return upload
+def input():
+    from tests.data.test_data import input
+    return input
 
 
 @pytest.fixture(scope='session')

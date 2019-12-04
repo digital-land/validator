@@ -19,7 +19,7 @@ def validate_file(file, schema):
         result = check_data(rows, schema)
 
         return Result(result=result,
-                      upload=data,
+                      input=data,
                       rows=rows,
                       meta_data=meta_data)
 
@@ -41,6 +41,6 @@ def revalidate_result(result, schema):
     res = check_data(result.rows, schema)
     return Result(id=result.id,
                   result=res,
-                  upload=result.upload,
+                  input=result.input,
                   rows=result.rows,
                   meta_data=result.meta_data)

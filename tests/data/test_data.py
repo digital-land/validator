@@ -1,6 +1,6 @@
 # flake8: noqa
 
-upload = [
+input = [
   {
     "DevelopmentDescription": "Erection of 27No. Dwellings",
     "GeoY": "139531",

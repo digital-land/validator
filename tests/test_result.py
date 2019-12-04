@@ -27,8 +27,8 @@ def date_error_message():
 
 @pytest.fixture(scope='session')
 def original_data():
-    from tests.data.test_data import upload
-    return upload
+    from tests.data.test_data import input
+    return input
 
 
 @pytest.fixture(scope='session')
@@ -45,7 +45,7 @@ def additional_data():
 
 def test_result_shows_total_number_of_errors(result, original_data, rows, meta_data):
     result = Result(result=result,
-                    upload=original_data,
+                    input=original_data,
                     rows=rows,
                     meta_data=meta_data)
     assert 7 == result.error_count()
@@ -54,7 +54,7 @@ def test_result_shows_total_number_of_errors(result, original_data, rows, meta_d
 def test_column_number_to_field_name(result, original_data, rows, meta_data):
 
     result = Result(result=result,
-                    upload=original_data,
+                    input=original_data,
                     rows=rows,
                     meta_data=meta_data)
 
@@ -84,7 +84,7 @@ def test_column_number_to_field_name(result, original_data, rows, meta_data):
 def test_field_name_to_column_number(result, original_data, rows, meta_data):
 
     result = Result(result=result,
-                    upload=original_data,
+                    input=original_data,
                     rows=rows,
                     meta_data=meta_data)
 
@@ -113,7 +113,7 @@ def test_field_name_to_column_number(result, original_data, rows, meta_data):
 def test_result_shows_error_counts_by_column(result, original_data, rows, meta_data):
 
     result = Result(result=result,
-                    upload=original_data,
+                    input=original_data,
                     rows=rows,
                     meta_data=meta_data)
 
@@ -131,7 +131,7 @@ def test_result_factory_method():
     from tests.data.result import result as _result
     result = Result.factory(_result)
     assert len(result.rows) == 2
-    assert len(result.upload) == 2
+    assert len(result.input) == 2
     assert not result.valid()
     assert result.error_count() == 8
     result.invalid_rows() == 2

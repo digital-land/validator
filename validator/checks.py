@@ -20,7 +20,7 @@ logger.addHandler(logging_handler)
 @check('geox-check', type='custom', context='body')
 def geox_check(cells):
     errors = []
-    geoX = _get_field(cells, 'GeoX')
+    geoX = _get_field(cells, 'GeoX' )
     if geoX is None:
         return errors
 
