@@ -1,9 +1,9 @@
 from validator.validator import validate_file
 
 
-def test_check_uploaded_data_in_end_to_end_validation(csv_file, schema_file, input):
+def test_check_uploaded_data_in_end_to_end_validation(csv_file, standard, input):
 
-    result = validate_file(csv_file, schema_file)
+    result = validate_file(csv_file, standard)
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.input) == 2
@@ -14,9 +14,9 @@ def test_check_uploaded_data_in_end_to_end_validation(csv_file, schema_file, inp
     assert set(result.input[1].values()) == set(input[1].values())
 
 
-def test_check_extracted_rows_in_end_to_end_validation(csv_file, schema_file, rows):
+def test_check_extracted_rows_in_end_to_end_validation(csv_file, standard, rows):
 
-    result = validate_file(csv_file, schema_file)
+    result = validate_file(csv_file, standard)
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.rows) == 2
@@ -27,9 +27,9 @@ def test_check_extracted_rows_in_end_to_end_validation(csv_file, schema_file, ro
     assert set(result.rows[1].values()) == set(rows[1].values())
 
 
-def test_check_errors_by_column_in_end_to_end_validation(csv_file, schema_file):
+def test_check_errors_by_column_in_end_to_end_validation(csv_file, standard):
 
-    result = validate_file(csv_file, schema_file)
+    result = validate_file(csv_file, standard)
 
     assert len(result.errors_by_column['GeoX']['errors']) == 2
     assert len(result.errors_by_column['GeoY']['errors']) == 2
@@ -42,9 +42,9 @@ def test_check_errors_by_column_in_end_to_end_validation(csv_file, schema_file):
     assert result.errors_by_column['PlanningHistory']['rows'] == [1]
 
 
-def test_check_errors_by_row_in_end_to_end_validation(csv_file, schema_file):
+def test_check_errors_by_row_in_end_to_end_validation(csv_file, standard):
 
-    result = validate_file(csv_file, schema_file)
+    result = validate_file(csv_file, standard)
 
     assert len(result.errors_by_row) == 2
 

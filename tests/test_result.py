@@ -43,20 +43,22 @@ def additional_data():
     return meta_data
 
 
-def test_result_shows_total_number_of_errors(result, original_data, rows, meta_data):
+def test_result_shows_total_number_of_errors(result, original_data, rows, meta_data, standard):
     result = Result(result=result,
                     input=original_data,
                     rows=rows,
-                    meta_data=meta_data)
+                    meta_data=meta_data,
+                    standard=standard)
     assert 7 == result.error_count()
 
 
-def test_column_number_to_field_name(result, original_data, rows, meta_data):
+def test_column_number_to_field_name(result, original_data, rows, meta_data, standard):
 
     result = Result(result=result,
                     input=original_data,
                     rows=rows,
-                    meta_data=meta_data)
+                    meta_data=meta_data,
+                    standard=standard)
 
     assert result.column_number_to_header(1) == 'Deliverable'
     assert result.column_number_to_header(2) == 'FirstAddedDate'
@@ -81,12 +83,13 @@ def test_column_number_to_field_name(result, original_data, rows, meta_data):
     assert result.column_number_to_header(20) == 'unknown'
 
 
-def test_field_name_to_column_number(result, original_data, rows, meta_data):
+def test_field_name_to_column_number(result, original_data, rows, meta_data, standard):
 
     result = Result(result=result,
                     input=original_data,
                     rows=rows,
-                    meta_data=meta_data)
+                    meta_data=meta_data,
+                    standard=standard)
 
     assert 1 == result.header_to_column_number('Deliverable')
     assert 2 == result.header_to_column_number("FirstAddedDate")
@@ -110,12 +113,13 @@ def test_field_name_to_column_number(result, original_data, rows, meta_data):
     assert -1 == result.header_to_column_number('unknown')
 
 
-def test_result_shows_error_counts_by_column(result, original_data, rows, meta_data):
+def test_result_shows_error_counts_by_column(result, original_data, rows, meta_data, standard):
 
     result = Result(result=result,
                     input=original_data,
                     rows=rows,
-                    meta_data=meta_data)
+                    meta_data=meta_data,
+                    standard=standard)
 
     expected = {'PlanningHistory': {'errors': [
                                     {'fix': None,
@@ -127,9 +131,9 @@ def test_result_shows_error_counts_by_column(result, original_data, rows, meta_d
     assert expected == result.collect_errors_by_column('PlanningHistory')
 
 
-def test_result_factory_method():
+def test_result_factory_method(standard):
     from tests.data.result import result as _result
-    result = Result.factory(_result)
+    result = Result.factory(_result, standard)
     assert len(result.rows) == 2
     assert len(result.input) == 2
     assert not result.valid()

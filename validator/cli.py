@@ -1,22 +1,26 @@
 import sys
-
 import click
 
 from validator.presenter.json import JsonResultPresenter
-from validator.utils import BrownfieldStandard
+from validator.standards import BrownfieldStandard, Standard
 from validator.validator import validate_file
 
-brownfield_v2_schema = BrownfieldStandard.v2_standard_schema()
 
 schema_help_text = "The path to the schema.json to validate file against. The default is version 2 of the Brownfield land data standard contained in this package."  # noqa
 
 
 @click.command()
 @click.option("--file", help="The path to the CSV file to validate.", required=True)
-@click.option("--schema", help=schema_help_text, default=brownfield_v2_schema)
+@click.option("--schema", help=schema_help_text, default='brownfield')
 def validate(file, schema):
     try:
-        result = validate_file(file, schema)
+        if schema == 'brownfield':
+            standard = BrownfieldStandard()
+        else:
+            standard = Standard(schema)
+
+        result = validate_file(file, standard)
+
         out = JsonResultPresenter(result)
         print(out)
         sys.exit(0)

@@ -8,20 +8,20 @@ logger = logging.getLogger(__name__)
 logger.addHandler(logging_handler)
 
 
-def validate_file(file, schema):
+def validate_file(file, standard):
     try:
-        extracted = extract_data(file)
-
+        extracted = extract_data(file, standard)
         data = extracted.get('data')
         rows = extracted.get('rows')
         meta_data = extracted.get('meta_data')
 
-        result = check_data(rows, schema)
+        result = check_data(rows, standard.schema)
 
         return Result(result=result,
                       input=data,
                       rows=rows,
-                      meta_data=meta_data)
+                      meta_data=meta_data,
+                      standard=standard)
 
     except FileTypeException as e:
         logger.exception(e)
@@ -34,13 +34,3 @@ def check_data(data, schema):
     checks = builtin_checks + custom_checks
     return goodtables.validate(data, schema=schema, order_fields=True, checks=checks)
 
-
-# TODO - I don't think this is really needed here, it can be moved to the
-# brownfield validator web app as it's more relevant in that context
-def revalidate_result(result, schema):
-    res = check_data(result.rows, schema)
-    return Result(id=result.id,
-                  result=res,
-                  input=result.input,
-                  rows=result.rows,
-                  meta_data=result.meta_data)

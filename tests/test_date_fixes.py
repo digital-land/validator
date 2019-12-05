@@ -1,8 +1,8 @@
 from validator.validator import validate_file
 
 
-def test_apply_date_fixes(csv_file, schema_file):
-    result = validate_file(csv_file, schema_file)
+def test_apply_date_fixes(csv_file, standard):
+    result = validate_file(csv_file, standard)
     assert result.errors_by_column['LastUpdatedDate']['rows'] == [1,2]
 
     assert result.rows[0]['LastUpdatedDate'] == '8 Dec 2017'

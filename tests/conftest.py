@@ -1,7 +1,8 @@
 import os
-from pathlib import Path
-
 import pytest
+
+from pathlib import Path
+from validator.standards import BrownfieldStandard
 
 
 @pytest.fixture(scope='session')
@@ -30,7 +31,5 @@ def csv_file():
 
 
 @pytest.fixture(scope='session')
-def schema_file():
-    path = Path(os.path.dirname(os.path.realpath(__file__))).parent
-    schema_file_path = os.path.join(path, 'validator', 'schema', 'brownfield-land-v2.json')
-    return schema_file_path
+def standard():
+    return BrownfieldStandard()

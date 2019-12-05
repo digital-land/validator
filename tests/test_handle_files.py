@@ -41,18 +41,18 @@ def not_a_csv_file():
     os.remove(test_output_file)
 
 
-def test_can_handle_xls_file(xls_file, schema_file):
+def test_can_handle_xls_file(xls_file, standard):
 
-    result = validate_file(xls_file, schema_file)
+    result = validate_file(xls_file, standard)
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.input) == 2
     assert result.meta_data['file_type'] == 'xls'
 
 
-def test_can_handle_xlsx_file(xlsx_file, schema_file):
+def test_can_handle_xlsx_file(xlsx_file, standard):
 
-    result = validate_file(xlsx_file, schema_file)
+    result = validate_file(xlsx_file, standard)
 
     assert result.result['tables'][0]['error-count'] == 10
     assert len(result.input) == 2
@@ -62,16 +62,16 @@ def test_can_handle_xlsx_file(xlsx_file, schema_file):
 # Note in this test there are additional date errors because of how xls2csv interprets dates.
 # A date format can be passed as flag to that call but we can't be sure what date formats
 # to expect as input
-def test_xlsm_file(xlsm_file, schema_file):
+def test_xlsm_file(xlsm_file, standard):
 
-    result = validate_file(xlsm_file, schema_file)
+    result = validate_file(xlsm_file, standard)
 
     assert result.result['tables'][0]['error-count'] == 14
     assert len(result.input) == 2
     assert result.meta_data['file_type'] == 'xlsm'
 
 
-def test_file_that_cannot_be_converted_to_csv_throws_exception(not_a_csv_file, schema_file):
+def test_file_that_cannot_be_converted_to_csv_throws_exception(not_a_csv_file, standard):
 
     with pytest.raises(FileTypeException):
-        validate_file(not_a_csv_file, schema_file)
+        validate_file(not_a_csv_file, standard)

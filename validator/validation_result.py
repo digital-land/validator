@@ -1,7 +1,6 @@
 from bidict import bidict
 
 from validator.error_mapper import ErrorMapper
-from validator.utils import BrownfieldStandard
 
 
 class Result:
@@ -11,6 +10,7 @@ class Result:
                  input,
                  rows,
                  meta_data,
+                 standard,
                  errors_by_row=None,
                  errors_by_column=None,
                  id=None):
@@ -20,6 +20,11 @@ class Result:
         self.input = input
         self.rows = rows
         self.meta_data = meta_data
+        self.standard = standard
+
+        # The following methods set state on this object so attributes above all need to be
+        # set before this point
+
         cols_to_headers = {}
         for column_number, header in enumerate(self.result['tables'][0]['headers']):
             cols_to_headers[column_number + 1] = header
@@ -34,13 +39,14 @@ class Result:
             self.errors_by_column = errors_by_column
 
     @staticmethod
-    def factory(result_dict):
+    def factory(result_dict, standard):
         result = Result(result=result_dict['result'],
                         input=result_dict['input'],
                         rows=result_dict['rows'],
                         meta_data=result_dict['meta_data'],
                         errors_by_row=result_dict['errors_by_row'],
-                        errors_by_column=result_dict['errors_by_column'])
+                        errors_by_column=result_dict['errors_by_column'],
+                        standard=standard)
         return result
 
     def valid(self):
@@ -56,7 +62,7 @@ class Result:
         return list(set(self.headers_found()) - set(self.additional_headers()))
 
     def extra_headers_found(self):
-        return list(set(self.additional_headers()) - set(BrownfieldStandard.headers_deprecated()))
+        return list(set(self.additional_headers()) - set(self.standard.headers_deprecated()))
 
     def deprecated_headers_found(self):
         return list(set(self.additional_headers()) - set(self.extra_headers_found()))
@@ -94,10 +100,10 @@ class Result:
     def check_headers(self):
         report_headers = self.headers_found()
         headers_status = "Headers correct"
-        for header in BrownfieldStandard.v2_standard_headers():
+        for header in self.standard.current_standard_headers():
             if header not in report_headers:
                 headers_status = "Missing headers"
-        for header in BrownfieldStandard.headers_deprecated():
+        for header in self.standard.headers_deprecated():
             if header in report_headers:
                 headers_status = "Warnings"
         if len(self.additional_headers()) > 0:
@@ -118,7 +124,7 @@ class Result:
 
     def collect_column_errors(self):
         errs = {}
-        for column in BrownfieldStandard.v2_standard_headers():
+        for column in self.standard.current_standard_headers():
             errs = {**errs, **self.collect_errors_by_column(column)}
         return errs
 
@@ -194,7 +200,7 @@ class Result:
         return {
             'id': str(self.id) if self.id else None,
             'meta_data': {
-                'headers_expected': BrownfieldStandard.v2_standard_headers(),
+                'headers_expected': self.standard.current_standard_headers(),
                 'headers_found': self.headers_found(),
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
