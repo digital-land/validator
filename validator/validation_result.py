@@ -41,8 +41,8 @@ class Result:
     @staticmethod
     def factory(result_dict, standard):
         result = Result(result=result_dict['result'],
-                        input=result_dict['input'],
-                        rows=result_dict['rows'],
+                        input=result_dict.get('input'),
+                        rows=result_dict.get('rows'),
                         meta_data=result_dict['meta_data'],
                         errors_by_row=result_dict['errors_by_row'],
                         errors_by_column=result_dict['errors_by_column'],

@@ -11,7 +11,7 @@ from validator.validation_result import Result
 @pytest.fixture(scope='session')
 def result():
     path = os.path.dirname(os.path.realpath(__file__))
-    data_file_path = os.path.join(path, 'data', 'result.json')
+    data_file_path = os.path.join(path, 'data', 'goodtables_result.json')
     with open(data_file_path, 'r') as f:
         data = json.load(f)
     return data
@@ -136,6 +136,21 @@ def test_result_factory_method(standard):
     result = Result.factory(_result, standard)
     assert len(result.rows) == 2
     assert len(result.input) == 2
+    assert not result.valid()
+    assert result.error_count() == 8
+    result.invalid_rows() == 2
+
+
+def test_result_factory_method_from_pruned_result(standard):
+    from tests.data.result import result as _result
+
+    _result.pop('rows')
+    _result.pop('input')
+
+    result = Result.factory(_result, standard)
+    assert result.rows is None
+    assert result.input is None
+
     assert not result.valid()
     assert result.error_count() == 8
     result.invalid_rows() == 2
