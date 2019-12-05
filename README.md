@@ -56,20 +56,11 @@ You can also validate against another schema:
     validate --file /path/to/a-brownfield-register.csv --schema /path/to/a-table-schema.json
     
 
-All output of the script is sent to the console. The default is a plain text summary of the results.
-
-To specify html or json output:
-
-    validate --file /path/to/a-brownfield-register.csv --output html
-   
-or
-    
-    validate  --file /path/to/a-brownfield-register.csv --output json
-
+All output of the script is sent as json to the console.
 
 Redirect output to create a file from the result:
 
-     validate --file /path/to/a-brownfield-register.csv --output html > a-brownfield-register-validation-result.html
+     validate --file /path/to/a-brownfield-register.csv > result.json
      
 
 ### Programmatic usage
