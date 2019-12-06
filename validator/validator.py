@@ -1,11 +1,11 @@
 import logging
 import goodtables
 
-from validator.utils import extract_data, FileTypeException, logging_handler
+from validator.utils import extract_data, FileTypeException
 from validator.validation_result import Result
+from validator.logger import get_logger
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging_handler)
+logger = get_logger(__name__)
 
 
 def validate_file(file, standard):
@@ -33,4 +33,3 @@ def check_data(data, schema):
     builtin_checks = ['structure', 'schema']
     checks = builtin_checks + custom_checks
     return goodtables.validate(data, schema=schema, order_fields=True, checks=checks)
-

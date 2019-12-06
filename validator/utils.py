@@ -1,17 +1,15 @@
 import codecs
 import collections
 import csv
-import logging
 
 from subprocess import CalledProcessError
 from cchardet import UniversalDetector
+from os.path import basename
+from validator.logger import get_logger
 
+csvdir = ""
 
-logging_handler = logging.StreamHandler()
-logging_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
-
-logger = logging.getLogger(__name__)
-logger.addHandler(logging_handler)
+logger = get_logger(__name__)
 
 
 class FileTypeException(Exception):
@@ -22,18 +20,22 @@ class FileTypeException(Exception):
 
 def try_convert_to_csv(filename):
     import subprocess
+    csvfile = csvdir + basename(filename) + ".csv"
+
+    logger.info("trying in2csv")
     try:
-        with open(f'{filename}.csv', 'w') as out:
+        with open(csvfile, 'w') as out:
             subprocess.check_call(['in2csv', filename], stdout=out)
-        return f'{filename}.csv', 'xls'
+        return csvfile, 'xls'
     except CalledProcessError as e:
-        print(e)
         logger.exception(e)
         # try converting with xls2csv
+
+    logger.info("trying xlsx2csv")
     try:
-        with open(f'{filename}.csv', 'w') as out:
+        with open(csvfile, 'w') as out:
             subprocess.check_call(['xlsx2csv', filename], stdout=out)
-        return f'{filename}.csv', 'xlsm'
+        return csvfile, 'xlsm'
     except CalledProcessError as e:
         logger.exception(e)
         msg = f"We could not process {filename.split('/')[-1]} as a csv file"
