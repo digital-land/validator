@@ -25,10 +25,13 @@ class Result:
         # The following methods set state on this object so attributes above all need to be
         # set before this point
 
+        self.result['tables'][0].setdefault('headers', {})
+
         cols_to_headers = {}
         for column_number, header in enumerate(self.result['tables'][0]['headers']):
             cols_to_headers[column_number + 1] = header
         self.column_numbers_to_headers = bidict(cols_to_headers)
+
         if errors_by_row is None:
             self.errors_by_row = self.collect_row_errors()
         else:
