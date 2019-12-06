@@ -61,8 +61,11 @@ class TypeOrFormatErrorMapper(ErrorMapper):
         if self.raw_error['message-data']['field_type'] == 'date':
             date_provided = self.raw_error['message-data']['value']
             d = dateparser.parse(date_provided)
-            valid_date = d.strftime('%Y-%m-%d')
-            message = f'The date {date_provided} should be entered as {valid_date}'
+            if d is None:
+                message = f'{date_provided} is not a valid date'
+            else:
+                valid_date = d.strftime('%Y-%m-%d')
+                message = f'The date {date_provided} should be entered as {valid_date}'
         elif self.raw_error['message-data']['field_type'] == 'number':
             message = f"{self.raw_error['message-data']['value']} is not a valid number"
         elif self.raw_error['message-data']['field_type'] == 'string':
@@ -75,8 +78,9 @@ class TypeOrFormatErrorMapper(ErrorMapper):
         if self.raw_error['message-data']['field_type'] == 'date':
             date_provided = self.raw_error['message-data']['value']
             d = dateparser.parse(date_provided)
-            valid_date = d.strftime('%Y-%m-%d')
-            fix = valid_date
+            if d is not None:
+                valid_date = d.strftime('%Y-%m-%d')
+                fix = valid_date
         return fix
 
 
