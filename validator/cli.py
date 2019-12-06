@@ -25,7 +25,8 @@ def validate(file, schema):
         print(out)
         sys.exit(0)
     except Exception as e:
-        sys.exit(-1)
+        print(e, file=sys.stderr)
+        sys.exit(1)
 
 
 if __name__ == '__main__':
