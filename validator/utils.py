@@ -76,7 +76,7 @@ def csv_to_dict(csv_file, original_file_type, standard):
         for row in reader:
             to_check = collections.OrderedDict()
 
-            # TODO get planning authority name from opendatacommunities
+            # TODO replace planning authority with "organisation"
             result['meta_data']['planning_authority'] = row.get('OrganisationLabel', 'Unknown')
 
             for column in standard.current_standard_headers():
