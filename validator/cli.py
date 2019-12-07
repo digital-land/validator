@@ -40,10 +40,7 @@ def validate(file, schema, csvdir, include_input, output):
             standard = Standard(schema)
 
         result = validate_file(file, standard)
-        result = result.to_dict()
-
-        if not include_input:
-            del result['input']
+        result = result.to_dict(include_input=include_input)
 
         out = json.dumps(result)
         if output:
