@@ -1,4 +1,4 @@
-all:
+all: test
 
 test:
 	pytest --flake8
