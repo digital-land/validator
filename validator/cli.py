@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 @click.command()
 @click.option("--file", help="Path of the file to validate.", required=True)
-@click.option("--output", help="Path of the output.", required=True)
+@click.option("--output", help="Path of the output.", required=False)
 @click.option(
     "--schema",
     default="brownfield",
