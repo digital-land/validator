@@ -199,18 +199,23 @@ class Result:
                     fixes_applied.append({'row': error['row'], 'from': value, 'to': fix})
         return fixes_applied
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_input=False):
+        result = {
             'id': str(self.id) if self.id else None,
             'meta_data': {
                 'headers_expected': self.standard.current_standard_headers(),
                 'headers_found': self.headers_found(),
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
+                'file_type': self.file_type()
             },
-            'input': self.input,
             'rows': self.rows,
             'errors_by_row': self.errors_by_row,
             'errors_by_column': self.errors_by_column,
             'result': self.result
         }
+
+        if include_input:
+            result['input'] = self.input
+
+        return result
