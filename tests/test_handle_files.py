@@ -32,11 +32,11 @@ def xlsm_file():
 
 
 @pytest.fixture(scope='session')
-def not_a_csv_file():
+def pdf_file():
     path = os.path.dirname(os.path.realpath(__file__))
-    not_a_csv_file_path = os.path.join(path, 'data', 'this_is_not_a_csv.pdf')
-    yield not_a_csv_file_path
-    test_output_file = f'{not_a_csv_file_path}.csv'
+    pdf_file = os.path.join(path, 'data', 'this_is_not_a_csv.pdf')
+    yield pdf_file
+    test_output_file = f'{pdf_file}.csv'
     os.remove(test_output_file)
 
 
@@ -46,7 +46,8 @@ def test_can_handle_xls_file(xls_file, standard):
 
     assert result.result['tables'][0]['error-count'] == 8
     assert len(result.input) == 2
-    assert result.meta_data['file_type'] == 'xls'
+    assert result.meta_data['media_type'] == 'application/vnd.ms-excel'
+    assert result.meta_data['suffix'] == '.xls'
 
 
 def test_can_handle_xlsx_file(xlsx_file, standard):
@@ -55,7 +56,8 @@ def test_can_handle_xlsx_file(xlsx_file, standard):
 
     assert result.result['tables'][0]['error-count'] == 8
     assert len(result.input) == 2
-    assert result.meta_data['file_type'] == 'xls'
+    assert result.meta_data['media_type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    assert result.meta_data['suffix'] == '.xlsx'
 
 
 # Note in this test there are additional date errors because of how xls2csv interprets dates.
@@ -67,10 +69,12 @@ def test_xlsm_file(xlsm_file, standard):
 
     assert result.result['tables'][0]['error-count'] == 8
     assert len(result.input) == 2
-    assert result.meta_data['file_type'] == 'xlsm'
+    assert result.meta_data['media_type'] == 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    assert result.meta_data['suffix'] == '.xlsx'
 
 
-def test_file_that_cannot_be_converted_to_csv_has_unknown_file_type(not_a_csv_file, standard):
+def test_can_handle_pdf_file(pdf_file, standard):
 
-    result = validate_file(not_a_csv_file, standard)
-    assert result.meta_data['file_type'] == 'unknown'
+    result = validate_file(pdf_file, standard)
+    assert result.meta_data['media_type'] == 'application/pdf'
+    assert result.meta_data['suffix'] == '.pdf'

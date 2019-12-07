@@ -21,7 +21,7 @@ logger = get_logger(__name__)
     "The default is the 2019 Brownfield land data standard contained in this package.",
 )
 @click.option(
-    "--csvdir", help="Path of the directory to create intermediate CSV files."
+    "--csv-dir", help="Path of the directory to create intermediate CSV files."
 )
 @click.option(
     "--include-input/--exclude-input",
@@ -29,9 +29,9 @@ logger = get_logger(__name__)
     default=True,
     help="Exclude a copy of the input in the results.",
 )
-def validate(file, schema, csvdir, include_input, output):
-    if csvdir:
-        validator.utils.csvdir = csvdir
+def validate(file, schema, csv_dir, include_input, output):
+    if csv_dir:
+        validator.utils.csv_dir = csv_dir
 
     try:
         if schema == "brownfield":

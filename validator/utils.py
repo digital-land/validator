@@ -4,18 +4,32 @@ import sys
 import csv
 from os.path import basename, dirname
 import pandas as pd
+import magic
+import mimetypes
 
 from cchardet import UniversalDetector
 from validator.logger import get_logger
 
-csvdir = None
+csv_dir = None
 
 logger = get_logger(__name__)
 
 
-def try_convert_to_csv(path):
-    csvpath = csvdir + basename(path) if csvdir else path
-    csvpath = csvpath + ".csv"
+def extract_data(path, standard):
+
+    if looks_like_csv(path):
+        media_type = 'text/csv'
+    else:
+        path, media_type = convert_to_csv(path)
+
+    return csv_to_dict(path, media_type, standard)
+
+
+def convert_to_csv(path):
+    media_type = magic.from_file(path, mime=True)
+
+    csv_path = csv_dir + basename(path) if csv_dir else path
+    csv_path = csv_path + ".csv"
 
     try:
         excel = pd.read_excel(path)
@@ -23,29 +37,24 @@ def try_convert_to_csv(path):
         excel = None
 
     if excel is not None:
-        excel.to_csv(csvpath, index=None, header=True)
-        return csvpath, 'excel'
+        excel.to_csv(csv_path, index=None, header=True)
+        return csv_path, media_type
 
-    logger.info(f"Unable to convert {path} to CSV")
-    with open(csvpath, 'w') as out:
+    logger.info(f"Unable to convert {path} from {media_type} to CSV")
+    with open(csv_path, 'w') as out:
         pass
-    return csvpath, 'unknown'
+    return csv_path, media_type
 
 
-def extract_data(file, standard):
-    original_file_type = 'csv'
-    if not _looks_like_csv(file):
-        file, original_file_type = try_convert_to_csv(file)
-    return csv_to_dict(file, original_file_type, standard)
-
-
-def csv_to_dict(csv_file, original_file_type, standard):
+def csv_to_dict(csv_file, media_type, standard):
+    suffix = mimetypes.guess_extension(media_type)
     result = {
         'meta_data': {
                 'headers_found': [],
                 'additional_headers': [],
                 'missing_headers': [],
-                'file_type': original_file_type
+                'media_type': media_type,
+                'suffix': suffix,
         },
         'rows': [],
         'data': [],
@@ -96,7 +105,7 @@ def get_markdown_for_field(field_name):
     return content
 
 
-def _looks_like_csv(file):
+def looks_like_csv(file):
     try:
         encoding = detect_encoding(file)
         with open(file, encoding=encoding['encoding']) as f:

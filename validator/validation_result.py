@@ -91,8 +91,11 @@ class Result:
         headers_found.update(headers_added)
         self.meta_data['headers_found'] = list(headers_found)
 
-    def file_type(self):
-        return self.meta_data.get('file_type')
+    def media_type(self):
+        return self.meta_data.get('media_type')
+
+    def suffix(self):
+        return self.meta_data.get('suffix')
 
     def error_count(self):
         return self.result.get('error-count')
@@ -204,7 +207,8 @@ class Result:
                 'headers_found': self.headers_found(),
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
-                'file_type': self.file_type()
+                'media_type': self.media_type(),
+                'suffix': self.suffix(),
             },
             'rows': self.rows,
             'errors_by_row': self.errors_by_row,
