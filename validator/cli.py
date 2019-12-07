@@ -13,6 +13,7 @@ logger = get_logger(__name__)
 
 @click.command()
 @click.option("--file", help="Path of the file to validate.", required=True)
+@click.option("--output", help="Path of the output.", required=True)
 @click.option(
     "--schema",
     default="brownfield",
@@ -28,7 +29,7 @@ logger = get_logger(__name__)
     default=True,
     help="Exclude a copy of the input in the results.",
 )
-def validate(file, schema, csvdir, include_input):
+def validate(file, schema, csvdir, include_input, output):
     if csvdir:
         validator.utils.csvdir = csvdir
 
@@ -45,7 +46,11 @@ def validate(file, schema, csvdir, include_input):
             del result['input']
 
         out = json.dumps(result)
-        print(out)
+        if output:
+            with open(output, "w") as f:
+                print(out, file=f)
+        else:
+            print(out)
         sys.exit(0)
     except Exception as e:
         logger.exception(e)
