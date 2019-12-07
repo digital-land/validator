@@ -1,7 +1,7 @@
 import logging
 import goodtables
 
-from validator.utils import extract_data, FileTypeException
+from validator.utils import extract_data
 from validator.validation_result import Result
 from validator.logger import get_logger
 
@@ -9,23 +9,18 @@ logger = get_logger(__name__)
 
 
 def validate_file(file, standard):
-    try:
-        extracted = extract_data(file, standard)
-        data = extracted.get('data')
-        rows = extracted.get('rows')
-        meta_data = extracted.get('meta_data')
+    extracted = extract_data(file, standard)
+    data = extracted.get('data')
+    rows = extracted.get('rows')
+    meta_data = extracted.get('meta_data')
 
-        result = check_data(rows, standard.schema)
+    result = check_data(rows, standard.schema)
 
-        return Result(result=result,
-                      input=data,
-                      rows=rows,
-                      meta_data=meta_data,
-                      standard=standard)
-
-    except FileTypeException as e:
-        logger.exception(e)
-        raise e
+    return Result(result=result,
+                  input=data,
+                  rows=rows,
+                  meta_data=meta_data,
+                  standard=standard)
 
 
 def check_data(data, schema):
