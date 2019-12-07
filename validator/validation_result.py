@@ -94,9 +94,6 @@ class Result:
     def file_type(self):
         return self.meta_data.get('file_type')
 
-    def planning_authority(self):
-        return self.meta_data.get('planning_authority')
-
     def error_count(self):
         return self.result.get('error-count')
 
