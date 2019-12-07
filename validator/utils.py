@@ -1,5 +1,6 @@
 import codecs
 import collections
+import sys
 import csv
 
 from subprocess import CalledProcessError
@@ -18,28 +19,27 @@ class FileTypeException(Exception):
         self.message = message
 
 
-def try_convert_to_csv(filename):
+def try_convert_to_csv(path):
     import subprocess
-    csvfile = csvdir + basename(filename) + ".csv"
+    csvfile = csvdir + basename(path) + ".csv"
 
-    logger.info("trying in2csv")
     try:
         with open(csvfile, 'w') as out:
-            subprocess.check_call(['in2csv', filename], stdout=out)
+            subprocess.check_call(['in2csv', path], stdout=out)
         return csvfile, 'xls'
     except CalledProcessError as e:
-        logger.exception(e)
-        # try converting with xls2csv
+        logger.info("in2csv failed: " + str(e))
 
-    logger.info("trying xlsx2csv")
     try:
         with open(csvfile, 'w') as out:
-            subprocess.check_call(['xlsx2csv', filename], stdout=out)
+            subprocess.check_call(['xlsx2csv', path], stdout=out)
         return csvfile, 'xlsm'
     except CalledProcessError as e:
-        logger.exception(e)
-        msg = f"We could not process {filename.split('/')[-1]} as a csv file"
-        raise FileTypeException(msg)
+        logger.info("xlsx2csv failed: " + str(e))
+
+    logger.info(f"Unable to convert {path} to CSV")
+    with open(csvfile, 'w') as out:
+        return csvfile, 'unknown'
 
 
 def extract_data(file, standard):
@@ -50,34 +50,44 @@ def extract_data(file, standard):
 
 
 def csv_to_dict(csv_file, original_file_type, standard):
-    rows = []
-    data = []
+    result = {
+        'meta_data': {
+                'headers_found': [],
+                'additional_headers': [],
+                'missing_headers': [],
+                'planning_authority': "Unknown",
+                'file_type': original_file_type
+        },
+        'rows': [],
+        'data': [],
+    }
+
     encoding = detect_encoding(csv_file)
     planning_authority = None
     with codecs.open(csv_file, encoding=encoding['encoding']) as f:
         reader = csv.DictReader(f)
-        additional_headers = list(set(reader.fieldnames) - set(standard.current_standard_headers()))
-        missing_headers = list(set(standard.current_standard_headers()) - set(reader.fieldnames))
+
+        if reader.fieldnames:
+            result['meta_data']['headers_found'] = reader.fieldnames
+
+        result['meta_data']['additional_headers'] = list(set(result['meta_data']['headers_found']) - set(standard.current_standard_headers()))
+        result['meta_data']['missing_headers'] = list(set(standard.current_standard_headers()) - set(result['meta_data']['headers_found']))
+
         for row in reader:
             to_check = collections.OrderedDict()
+
             # TODO get planning authority name from opendatacommunities
-            if planning_authority is None:
-                planning_authority = row.get('OrganisationLabel', 'Unknown')
+            result['meta_data']['planning_authority'] = row.get('OrganisationLabel', 'Unknown')
+
             for column in standard.current_standard_headers():
                 value = row.get(column, None)
                 if value is not None:
                     to_check[column] = row.get(column)
-            rows.append(to_check)
-            data.append(row)
-    return {'rows': rows,
-            'data': data,
-            'meta_data': {
-                'headers_found': reader.fieldnames,
-                'additional_headers': additional_headers,
-                'missing_headers': missing_headers,
-                'planning_authority': planning_authority,
-                'file_type': original_file_type}
-            }
+
+            result['rows'].append(to_check)
+            result['data'].append(row)
+
+    return result
 
 
 def detect_encoding(file):
