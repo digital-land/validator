@@ -1,7 +1,6 @@
 import os
 import pytest
 
-from validator.utils import FileTypeException
 from validator.validator import validate_file
 
 
@@ -71,7 +70,7 @@ def test_xlsm_file(xlsm_file, standard):
     assert result.meta_data['file_type'] == 'xlsm'
 
 
-def test_file_that_cannot_be_converted_to_csv_throws_exception(not_a_csv_file, standard):
+def test_file_that_cannot_be_converted_to_csv_has_unknown_file_type(not_a_csv_file, standard):
 
-    with pytest.raises(FileTypeException):
-        validate_file(not_a_csv_file, standard)
+    result = validate_file(not_a_csv_file, standard)
+    assert result.meta_data['file_type'] == 'unknown'

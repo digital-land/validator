@@ -2,39 +2,34 @@ import codecs
 import collections
 import sys
 import csv
+from os.path import basename, dirname
 
-from subprocess import CalledProcessError
+import subprocess
 from cchardet import UniversalDetector
-from os.path import basename
 from validator.logger import get_logger
 
-csvdir = ""
+csvdir = None
 
 logger = get_logger(__name__)
 
 
-class FileTypeException(Exception):
-
-    def __init__(self, message):
-        self.message = message
-
-
 def try_convert_to_csv(path):
-    import subprocess
-    csvfile = csvdir + basename(path) + ".csv"
+
+    csvfile = csvdir + basename(path) if csvdir else path
+    csvfile = csvfile + ".csv"
 
     try:
         with open(csvfile, 'w') as out:
             subprocess.check_call(['in2csv', path], stdout=out)
         return csvfile, 'xls'
-    except CalledProcessError as e:
+    except subprocess.CalledProcessError as e:
         logger.info("in2csv failed: " + str(e))
 
     try:
         with open(csvfile, 'w') as out:
             subprocess.check_call(['xlsx2csv', path], stdout=out)
         return csvfile, 'xlsm'
-    except CalledProcessError as e:
+    except subprocess.CalledProcessError as e:
         logger.info("xlsx2csv failed: " + str(e))
 
     logger.info(f"Unable to convert {path} to CSV")
