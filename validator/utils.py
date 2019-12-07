@@ -3,8 +3,8 @@ import collections
 import sys
 import csv
 from os.path import basename, dirname
+import pandas as pd
 
-import subprocess
 from cchardet import UniversalDetector
 from validator.logger import get_logger
 
@@ -14,27 +14,22 @@ logger = get_logger(__name__)
 
 
 def try_convert_to_csv(path):
-
-    csvfile = csvdir + basename(path) if csvdir else path
-    csvfile = csvfile + ".csv"
-
-    try:
-        with open(csvfile, 'w') as out:
-            subprocess.check_call(['in2csv', path], stdout=out)
-        return csvfile, 'xls'
-    except subprocess.CalledProcessError as e:
-        logger.info("in2csv failed: " + str(e))
+    csvpath = csvdir + basename(path) if csvdir else path
+    csvpath = csvpath + ".csv"
 
     try:
-        with open(csvfile, 'w') as out:
-            subprocess.check_call(['xlsx2csv', path], stdout=out)
-        return csvfile, 'xlsm'
-    except subprocess.CalledProcessError as e:
-        logger.info("xlsx2csv failed: " + str(e))
+        excel = pd.read_excel(path)
+    except:
+        excel = None
+
+    if excel is not None:
+        excel.to_csv(csvpath, index=None, header=True)
+        return csvpath, 'excel'
 
     logger.info(f"Unable to convert {path} to CSV")
-    with open(csvfile, 'w') as out:
-        return csvfile, 'unknown'
+    with open(csvpath, 'w') as out:
+        pass
+    return csvpath, 'unknown'
 
 
 def extract_data(file, standard):
@@ -50,7 +45,6 @@ def csv_to_dict(csv_file, original_file_type, standard):
                 'headers_found': [],
                 'additional_headers': [],
                 'missing_headers': [],
-                'planning_authority': "Unknown",
                 'file_type': original_file_type
         },
         'rows': [],
@@ -58,7 +52,6 @@ def csv_to_dict(csv_file, original_file_type, standard):
     }
 
     encoding = detect_encoding(csv_file)
-    planning_authority = None
     with codecs.open(csv_file, encoding=encoding['encoding']) as f:
         reader = csv.DictReader(f)
 
@@ -70,9 +63,6 @@ def csv_to_dict(csv_file, original_file_type, standard):
 
         for row in reader:
             to_check = collections.OrderedDict()
-
-            # TODO replace planning authority with "organisation"
-            result['meta_data']['planning_authority'] = row.get('OrganisationLabel', 'Unknown')
 
             for column in standard.current_standard_headers():
                 value = row.get(column, None)
