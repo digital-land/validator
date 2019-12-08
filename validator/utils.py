@@ -47,14 +47,13 @@ def convert_to_csv(path):
 
 
 def csv_to_dict(csv_file, media_type, standard):
-    suffix = mimetypes.guess_extension(media_type)
     result = {
         'meta_data': {
                 'headers_found': [],
                 'additional_headers': [],
                 'missing_headers': [],
                 'media_type': media_type,
-                'suffix': suffix,
+                'suffix': suffix_for_media_type(media_type),
         },
         'rows': [],
         'data': [],
@@ -94,6 +93,14 @@ def detect_encoding(file):
                 break
     detector.close()
     return detector.result
+
+
+def suffix_for_media_type(media_type):
+    suffix = {
+        'application/vnd.ms-excel': '.xls',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+    }
+    return suffix.get(media_type, mimetypes.guess_extension(media_type))
 
 
 def get_markdown_for_field(field_name):
