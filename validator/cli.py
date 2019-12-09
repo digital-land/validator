@@ -25,11 +25,17 @@ logger = get_logger(__name__)
 )
 @click.option(
     "--include-input/--exclude-input",
-    " /-i",
+    " /-I",
     default=True,
     help="Exclude a copy of the input in the results.",
 )
-def validate(file, schema, csv_dir, include_input, output):
+@click.option(
+    "--include-rows/--exclude-rows",
+    " /-R",
+    default=True,
+    help="Exclude harmonised rows in results.",
+)
+def validate(file, schema, csv_dir, include_input, include_rows, output):
     if csv_dir:
         validator.utils.csv_dir = csv_dir
 
@@ -40,7 +46,7 @@ def validate(file, schema, csv_dir, include_input, output):
             standard = Standard(schema)
 
         result = validate_file(file, standard)
-        result = result.to_dict(include_input=include_input)
+        result = result.to_dict(include_input=include_input, include_rows=include_rows)
 
         out = json.dumps(result)
         if output:

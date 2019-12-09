@@ -199,7 +199,7 @@ class Result:
                     fixes_applied.append({'row': error['row'], 'from': value, 'to': fix})
         return fixes_applied
 
-    def to_dict(self, include_input=False):
+    def to_dict(self, include_input=False, include_rows=False):
         result = {
             'id': str(self.id) if self.id else None,
             'meta_data': {
@@ -210,7 +210,6 @@ class Result:
                 'media_type': self.media_type(),
                 'suffix': self.suffix(),
             },
-            'rows': self.rows,
             'errors_by_row': self.errors_by_row,
             'errors_by_column': self.errors_by_column,
             'result': self.result
@@ -218,5 +217,8 @@ class Result:
 
         if include_input:
             result['input'] = self.input
+
+        if include_rows:
+            result['rows'] = self.rows
 
         return result
