@@ -2,6 +2,7 @@ import codecs
 import collections
 import sys
 import csv
+import os
 from os.path import basename, dirname
 import pandas as pd
 import magic
@@ -10,13 +11,12 @@ import mimetypes
 from cchardet import UniversalDetector
 from validator.logger import get_logger
 
-csv_dir = None
+tmp_dir = None
 
 logger = get_logger(__name__)
 
 
 def extract_data(path, standard):
-
     if looks_like_csv(path):
         media_type = 'text/csv'
     else:
@@ -27,9 +27,7 @@ def extract_data(path, standard):
 
 def convert_to_csv(path):
     media_type = magic.from_file(path, mime=True)
-
-    csv_path = csv_dir + basename(path) if csv_dir else path
-    csv_path = csv_path + ".csv"
+    tmp_path = csv_path(tmp_dir, path)
 
     try:
         excel = pd.read_excel(path)
@@ -37,13 +35,13 @@ def convert_to_csv(path):
         excel = None
 
     if excel is not None:
-        excel.to_csv(csv_path, index=None, header=True)
-        return csv_path, media_type
+        excel.to_csv(tmp_path, index=None, header=True)
+        return tmp_path, media_type
 
     logger.info(f"Unable to convert {path} from {media_type} to CSV")
-    with open(csv_path, 'w') as out:
+    with open(tmp_path, 'w') as out:
         pass
-    return csv_path, media_type
+    return tmp_path, media_type
 
 
 def csv_to_dict(csv_file, media_type, standard):
@@ -117,7 +115,24 @@ def looks_like_csv(file):
         encoding = detect_encoding(file)
         with open(file, encoding=encoding['encoding']) as f:
             content = f.read()
+            if content.lower().startswith('<!doctype html'):
+                return False
             csv.Sniffer().sniff(content)
             return True
     except Exception as e:  # noqa
         return False
+
+
+def csv_path(_dir, path):
+    path = os.path.join(_dir, basename(path)) if _dir else path
+    return path + ".csv"
+
+
+def save_csv(data, file):
+    if data:
+        fieldnames = data[0].keys()
+        if fieldnames:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in data:
+                writer.writerow(row)
