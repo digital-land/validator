@@ -34,7 +34,7 @@ If you're using pip add the following to your requirements file:
 
 #### Dependencies
 
-* libmagic (install with Homebrew)
+* libmagic (install with Homebrew on OS X)
 
 ### Command  line usage
 
