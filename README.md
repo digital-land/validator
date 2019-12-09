@@ -32,7 +32,9 @@ If you're using pip add the following to your requirements file:
 
     -e git+https://github.com/digital-land/validator.git#egg=Validator
 
+#### Dependencies
 
+* libmagic (install with Homebrew)
 
 ### Command  line usage
 
