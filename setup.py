@@ -16,6 +16,8 @@ setup(
                       "jinja2",
                       "csvkit",
                       "xlsx2csv",
+                      "pandas",
+                      "python-magic",
                       ],
     classifiers=[
         "Development Status :: 3 - Alpha",
