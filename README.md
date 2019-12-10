@@ -32,7 +32,9 @@ If you're using pip add the following to your requirements file:
 
     -e git+https://github.com/digital-land/validator.git#egg=Validator
 
+#### Dependencies
 
+* libmagic (install with Homebrew on OS X)
 
 ### Command  line usage
 
@@ -89,9 +91,7 @@ To run tests with linting
  
 #### TODO
 
-- More work needs to be done if we want to make this a more generic validator as it's still very tightly coupled to 
-brownfield land csv validation.
-- html template for output is bare bones while awaiting some jinja macros being extracted from validator prototype.
-- extract brownfield schema to more permanent home and remove it as the default so that this library is more agnostic.
-- rather than default to brownfield schema above, default would be a basic goodtables structural check.
-- document the additional checks in this code base and add them to validation based on user input or configuration?
+- Optionally save the input as a normalised CSV file
+- Move harmonisation code to separate process
+- Support other schemas than brownfield sites
+- Support structural check of vanilla CSV files

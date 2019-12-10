@@ -25,10 +25,13 @@ class Result:
         # The following methods set state on this object so attributes above all need to be
         # set before this point
 
+        self.result['tables'][0].setdefault('headers', {})
+
         cols_to_headers = {}
         for column_number, header in enumerate(self.result['tables'][0]['headers']):
             cols_to_headers[column_number + 1] = header
         self.column_numbers_to_headers = bidict(cols_to_headers)
+
         if errors_by_row is None:
             self.errors_by_row = self.collect_row_errors()
         else:
@@ -88,11 +91,11 @@ class Result:
         headers_found.update(headers_added)
         self.meta_data['headers_found'] = list(headers_found)
 
-    def file_type(self):
-        return self.meta_data.get('file_type')
+    def media_type(self):
+        return self.meta_data.get('media_type')
 
-    def planning_authority(self):
-        return self.meta_data.get('planning_authority')
+    def suffix(self):
+        return self.meta_data.get('suffix')
 
     def error_count(self):
         return self.result.get('error-count')
@@ -196,18 +199,26 @@ class Result:
                     fixes_applied.append({'row': error['row'], 'from': value, 'to': fix})
         return fixes_applied
 
-    def to_dict(self):
-        return {
+    def to_dict(self, include_input=False, include_rows=False):
+        result = {
             'id': str(self.id) if self.id else None,
             'meta_data': {
                 'headers_expected': self.standard.current_standard_headers(),
                 'headers_found': self.headers_found(),
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
+                'media_type': self.media_type(),
+                'suffix': self.suffix(),
             },
-            'input': self.input,
-            'rows': self.rows,
             'errors_by_row': self.errors_by_row,
             'errors_by_column': self.errors_by_column,
             'result': self.result
         }
+
+        if include_input:
+            result['input'] = self.input
+
+        if include_rows:
+            result['rows'] = self.rows
+
+        return result

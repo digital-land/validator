@@ -1,81 +1,84 @@
 import codecs
 import collections
+import sys
 import csv
-import logging
+import os
+from os.path import basename, dirname
+import pandas as pd
+import magic
+import mimetypes
 
-from subprocess import CalledProcessError
 from cchardet import UniversalDetector
+from validator.logger import get_logger
+
+tmp_dir = None
+
+logger = get_logger(__name__)
 
 
-logging_handler = logging.StreamHandler()
-logging_handler.setFormatter(logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s'))
+def extract_data(path, standard):
+    if looks_like_csv(path):
+        media_type = 'text/csv'
+    else:
+        path, media_type = convert_to_csv(path)
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging_handler)
-
-
-class FileTypeException(Exception):
-
-    def __init__(self, message):
-        self.message = message
+    return csv_to_dict(path, media_type, standard)
 
 
-def try_convert_to_csv(filename):
-    import subprocess
+def convert_to_csv(path):
+    media_type = magic.from_file(path, mime=True)
+    tmp_path = csv_path(tmp_dir, path)
+
     try:
-        with open(f'{filename}.csv', 'w') as out:
-            subprocess.check_call(['in2csv', filename], stdout=out)
-        return f'{filename}.csv', 'xls'
-    except CalledProcessError as e:
-        print(e)
-        logger.exception(e)
-        # try converting with xls2csv
-    try:
-        with open(f'{filename}.csv', 'w') as out:
-            subprocess.check_call(['xlsx2csv', filename], stdout=out)
-        return f'{filename}.csv', 'xlsm'
-    except CalledProcessError as e:
-        logger.exception(e)
-        msg = f"We could not process {filename.split('/')[-1]} as a csv file"
-        raise FileTypeException(msg)
+        excel = pd.read_excel(path)
+    except:
+        excel = None
+
+    if excel is not None:
+        excel.to_csv(tmp_path, index=None, header=True)
+        return tmp_path, media_type
+
+    logger.info(f"Unable to convert {path} from {media_type} to CSV")
+    with open(tmp_path, 'w') as out:
+        pass
+    return tmp_path, media_type
 
 
-def extract_data(file, standard):
-    original_file_type = 'csv'
-    if not _looks_like_csv(file):
-        file, original_file_type = try_convert_to_csv(file)
-    return csv_to_dict(file, original_file_type, standard)
+def csv_to_dict(csv_file, media_type, standard):
+    result = {
+        'meta_data': {
+                'headers_found': [],
+                'additional_headers': [],
+                'missing_headers': [],
+                'media_type': media_type,
+                'suffix': suffix_for_media_type(media_type),
+        },
+        'rows': [],
+        'data': [],
+    }
 
-
-def csv_to_dict(csv_file, original_file_type, standard):
-    rows = []
-    data = []
     encoding = detect_encoding(csv_file)
-    planning_authority = None
     with codecs.open(csv_file, encoding=encoding['encoding']) as f:
         reader = csv.DictReader(f)
-        additional_headers = list(set(reader.fieldnames) - set(standard.current_standard_headers()))
-        missing_headers = list(set(standard.current_standard_headers()) - set(reader.fieldnames))
+
+        if reader.fieldnames:
+            result['meta_data']['headers_found'] = reader.fieldnames
+
+        result['meta_data']['additional_headers'] = list(set(result['meta_data']['headers_found']) - set(standard.current_standard_headers()))
+        result['meta_data']['missing_headers'] = list(set(standard.current_standard_headers()) - set(result['meta_data']['headers_found']))
+
         for row in reader:
             to_check = collections.OrderedDict()
-            # TODO get planning authority name from opendatacommunities
-            if planning_authority is None:
-                planning_authority = row.get('OrganisationLabel', 'Unknown')
+
             for column in standard.current_standard_headers():
                 value = row.get(column, None)
                 if value is not None:
                     to_check[column] = row.get(column)
-            rows.append(to_check)
-            data.append(row)
-    return {'rows': rows,
-            'data': data,
-            'meta_data': {
-                'headers_found': reader.fieldnames,
-                'additional_headers': additional_headers,
-                'missing_headers': missing_headers,
-                'planning_authority': planning_authority,
-                'file_type': original_file_type}
-            }
+
+            result['rows'].append(to_check)
+            result['data'].append(row)
+
+    return result
 
 
 def detect_encoding(file):
@@ -90,6 +93,14 @@ def detect_encoding(file):
     return detector.result
 
 
+def suffix_for_media_type(media_type):
+    suffix = {
+        'application/vnd.ms-excel': '.xls',
+        'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': '.xlsx',
+    }
+    return suffix.get(media_type, mimetypes.guess_extension(media_type))
+
+
 def get_markdown_for_field(field_name):
     from pathlib import Path
     current_directory = Path(__file__).parent.resolve()
@@ -99,12 +110,29 @@ def get_markdown_for_field(field_name):
     return content
 
 
-def _looks_like_csv(file):
+def looks_like_csv(file):
     try:
         encoding = detect_encoding(file)
         with open(file, encoding=encoding['encoding']) as f:
             content = f.read()
+            if content.lower().startswith('<!doctype html'):
+                return False
             csv.Sniffer().sniff(content)
             return True
     except Exception as e:  # noqa
         return False
+
+
+def csv_path(_dir, path):
+    path = os.path.join(_dir, basename(path)) if _dir else path
+    return path + ".csv"
+
+
+def save_csv(data, file):
+    if data:
+        fieldnames = data[0].keys()
+        if fieldnames:
+            writer = csv.DictWriter(file, fieldnames=fieldnames)
+            writer.writeheader()
+            for row in data:
+                writer.writerow(row)

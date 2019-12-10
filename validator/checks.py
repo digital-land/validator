@@ -2,7 +2,7 @@ import logging
 
 from goodtables import Error, check
 from validators import url
-from validator.utils import logging_handler
+from validator.logger import get_logger
 
 LATITUDE = 'latitude'
 LONGITUDE = 'longitude'
@@ -13,8 +13,7 @@ MAXIMUM_UK_LONGITUDE = 2
 MAX_DECIMAL_PLACES = 6
 
 
-logger = logging.getLogger(__name__)
-logger.addHandler(logging_handler)
+logger = get_logger(__name__)
 
 
 @check('geox-check', type='custom', context='body')
