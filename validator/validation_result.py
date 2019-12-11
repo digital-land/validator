@@ -204,6 +204,7 @@ class Result:
             'id': str(self.id) if self.id else None,
             'meta_data': {
                 'headers_expected': self.standard.current_standard_headers(),
+                'headers_deprecated': self.standard.headers_deprecated(),
                 'headers_found': self.headers_found(),
                 'missing_headers': self.missing_headers(),
                 'additional_headers': self.additional_headers(),
