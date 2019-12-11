@@ -210,6 +210,7 @@ class Result:
                 'additional_headers': self.additional_headers(),
                 'media_type': self.media_type(),
                 'suffix': self.suffix(),
+                'invalid_row_count': len(self.invalid_rows()),
             },
             'errors_by_row': self.errors_by_row,
             'errors_by_column': self.errors_by_column,
