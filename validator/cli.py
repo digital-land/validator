@@ -1,7 +1,7 @@
 import os
 import sys
 import click
-import json
+import canonicaljson
 
 from validator.standards import BrownfieldStandard, Standard
 from validator.validator import validate_file
@@ -49,7 +49,7 @@ def validate(file, schema, tmp_dir, save_dir, include_input, include_rows, outpu
         result = validate_file(file, standard)
 
         r = result.to_dict(include_input=include_input, include_rows=include_rows)
-        out = json.dumps(r)
+        out = canonicaljson.encode_canonical_json(r)
         if output:
             with open(output, "w") as f:
                 print(out, file=f)

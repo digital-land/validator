@@ -15,6 +15,7 @@ setup(
                       "dateparser",
                       "jinja2",
                       "csvkit",
+                      "canonicaljson",
                       "xlsx2csv",
                       "pandas",
                       "python-magic",
