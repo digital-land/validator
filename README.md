@@ -91,7 +91,9 @@ To run tests with linting
  
 #### TODO
 
-- Optionally save the input as a normalised CSV file
-- Move harmonisation code to separate process
+- report on detected character encoding not being UTF-8
+- Remove harmonisation code
+- Warn rather than error new fields which are missing
+- Warn rather than error unexpected fields
 - Support other schemas than brownfield sites
-- Support structural check of vanilla CSV files
+- Handle multiple files and data packages
