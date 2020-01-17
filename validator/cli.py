@@ -51,7 +51,7 @@ def validate(file, schema, tmp_dir, save_dir, include_input, include_rows, outpu
         r = result.to_dict(include_input=include_input, include_rows=include_rows)
         out = canonicaljson.encode_canonical_json(r)
         if output:
-            with open(output, "w") as f:
+            with open(output, "wb") as f:
                 print(out, file=f)
         else:
             print(out)
