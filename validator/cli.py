@@ -52,9 +52,9 @@ def validate(file, schema, tmp_dir, save_dir, include_input, include_rows, outpu
         out = canonicaljson.encode_canonical_json(r)
         if output:
             with open(output, "wb") as f:
-                print(out, file=f)
+                f.write(out)
         else:
-            print(out)
+            sys.stdout.buffer.write(out)
 
         if save_dir:
             save_path = validator.utils.csv_path(save_dir, file)
