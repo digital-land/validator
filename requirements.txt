@@ -29,7 +29,7 @@ ijson==2.5.1
 importlib-metadata==0.23 ; python_version < '3.8'
 isodate==0.6.0
 jdcal==1.4.1
-jinja2==2.10.3
+jinja2==2.11.3
 jmespath==0.9.4
 jsonlines==1.2.0
 jsonpointer==2.0
