@@ -6,7 +6,7 @@ agate-excel==0.2.3
 agate-sql==0.5.4
 agate==1.6.1
 attrs==19.3.0
-babel==2.7.0
+babel==2.9.1
 bidict==0.18.3
 boto3==1.10.28
 botocore==1.13.28
